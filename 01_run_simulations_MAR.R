@@ -1,4 +1,4 @@
-source("code/fn_missing_indicator.R")
+source("code/fn_missing_indicator_MAR.R")
 library(tidyverse)
 library(mice)
 library(furrr)
@@ -28,7 +28,7 @@ sims_rA_neq_U <- crossing(
   # simply set rA to U if true
   beta_0 = 0,
   # interecept in rA model
-  beta_U = grd4,
+  beta_U = c(-1, grd4),
   # effect of A on rA
   beta_A = grd4,
   # effect of U on rA
@@ -114,7 +114,7 @@ sims_rA_eq_U <- sims_rA_eq_U %>%
                         simulate_nrun))
 
 
-saveRDS(sims_rA_eq_U, file = "output/sims_rA_eq_U.RDS")
+saveRDS(sims_rA_eq_U, file = "sims_rA_eq_U.RDS")
 
 set.seed(133290720)
 
@@ -124,7 +124,7 @@ sims_rA_neq_U <- sims_rA_neq_U %>%
                              gamma_0, gamma_U, gamma_A, gamma_UA, sigma_Y, n_rep),
                         simulate_nrun))
 
-saveRDS(sims_rA_neq_U, file = "output/sims_rA_neq_U.RDS")
+saveRDS(sims_rA_neq_U, file = "sims_rA_neq_U.RDS")
 
 
 
@@ -148,12 +148,12 @@ saveRDS(sims_rA_neq_U, file = "output/sims_rA_neq_U.RDS")
 #  })
 #  
 #  
-#  system.time({ 
-#    plan(multiprocess)
-#    sims_rA_eq_U3 <- sims_rA_eq_U[1:10,] %>%
-#      mutate(results = future_pmap(list(n, pi_U, alpha_0, alpha_U, sigma_A,
-#                                        rA_equals_U, beta_0, beta_U, beta_A, beta_UA,
-#                                        gamma_0, gamma_U, gamma_A, gamma_UA, sigma_Y, n_rep),
-#                                   simulate_nrun))
-#  })
+ # system.time({
+ # 
+ #   sims_rA_neq_U2 <- sims_rA_neq_U[1:3,] %>%
+ #     mutate(results = future_pmap(list(n, pi_U, alpha_0, alpha_U, sigma_A,
+ #                                       rA_equals_U, beta_0, beta_U, beta_A, beta_UA,
+ #                                       gamma_0, gamma_U, gamma_A, gamma_UA, sigma_Y, n_rep),
+ #                                  simulate_nrun))
+ # })
  
